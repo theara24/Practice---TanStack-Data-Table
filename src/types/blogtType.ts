@@ -1,5 +1,7 @@
 export type BlogType = {
-    id: number;
+    id: string;
     title: string;
-    body: string;
-}
+    content: string;
+    userId: string;
+    author: string; // or author: { name: string } if nested
+  };
