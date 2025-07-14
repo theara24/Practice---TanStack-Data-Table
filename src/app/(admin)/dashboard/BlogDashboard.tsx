@@ -8,8 +8,14 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 import { BlogType } from '../../../types/blogtType';
 
-export default function BlogDashboard() {
-  const [blogs, setBlogs] = useState<BlogType[]>([]);
+type BlogDashboardProps = {
+  initialBlogs?: BlogType[];
+};
+
+export default function BlogDashboard({
+  initialBlogs = [],
+}: BlogDashboardProps) {
+  const [blogs, setBlogs] = useState<BlogType[]>(initialBlogs);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filteredBlogs, setFilteredBlogs] = useState<BlogType[]>([]);
@@ -30,7 +36,8 @@ export default function BlogDashboard() {
         const url = `${process.env.NEXT_PUBLIC_BASE_URL_API}posts`;
         console.log('Fetching from:', url);
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`Network response was not ok: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`Network response was not ok: ${response.status}`);
         const data = await response.json();
         console.log('API response:', data);
         // Handle different API response structures
@@ -39,10 +46,15 @@ export default function BlogDashboard() {
         const blogsWithAuthor = await Promise.all(
           blogData.map(async (blog: BlogType) => {
             if (!blog.author && blog.userId) {
-              const userRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_API}users/${blog.userId}`);
+              const userRes = await fetch(
+                `${process.env.NEXT_PUBLIC_BASE_URL_API}users/${blog.userId}`
+              );
               if (userRes.ok) {
                 const user = await userRes.json();
-                return { ...blog, author: `${user.firstName} ${user.lastName}` || 'Unknown' };
+                return {
+                  ...blog,
+                  author: `${user.firstName} ${user.lastName}` || 'Unknown',
+                };
               }
             }
             return { ...blog, author: blog.author || 'Unknown' };
