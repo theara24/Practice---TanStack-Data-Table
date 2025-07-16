@@ -1,18 +1,21 @@
-import type { Metadata } from "next";
-import { Ubuntu } from "next/font/google";
-import localFont from "next/font/local";
-import "./globals.css";
-import { Suspense } from "react";
-import Loading from "./loading";
-import Error from "./error";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import NavbarWrapper from "@/components/header/NavbarWrapper";
+// src/app/layout.tsx
+import type { Metadata } from 'next';
+import { Ubuntu } from 'next/font/google';
+import localFont from 'next/font/local';
+import './globals.css';
+import { Suspense } from 'react';
+import Loading from './loading';
+import Error from './error';
+import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
+import SidebarWrapper from '@/components/sidebar/SidebarWrapper';
+import NavbarWrapper from '@/components/header/NavbarWrapper';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 const ubuntu = Ubuntu({
-  variable: "--font-ubuntu",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["300", "400", "500", "700"],
+  variable: '--font-ubuntu',
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['300', '400', '500', '700'],
 });
 
 const suwannaphum = localFont({
@@ -41,45 +44,48 @@ const suwannaphum = localFont({
       path: '../../public/fonts/Suwannaphum-Thin.ttf',
       weight: '100',
       style: 'thin',
-    }
+    },
   ],
-  variable: "--font-suwannaphum",
-  display: "swap",
-})
-
+  variable: '--font-suwannaphum',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: "Home | FullStack Morning",
-  description: "A simple Next.js app with TypeScript, Tailwind CSS, and Geist UI",
+  title: 'Home | FullStack Morning',
+  description:
+    'A simple Next.js app with TypeScript, Tailwind CSS, and Geist UI',
   keywords: [
-    "Next.js",
-    "TypeScript",
-    "Tailwind CSS",
-    "Geist UI",
-    "FullStack Morning",
-    "Web Development",
-    "React",
-    "Frontend Development",
+    'Next.js',
+    'TypeScript',
+    'Tailwind CSS',
+    'Geist UI',
+    'FullStack Morning',
+    'Web Development',
+    'React',
+    'Frontend Development',
   ],
   openGraph: {
-    title: "Home | FullStack Morning",
-    description: "A simple Next.js app with TypeScript, Tailwind CSS, and Geist UI",
-    url: "https://fullstack-nextjs-morning.vercel.app/",
-    siteName: "FullStack Morning",
-    images: "https://media.licdn.com/dms/image/v2/C5612AQFxx3XzXO9Vew/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1583841493429?e=2147483647&v=beta&t=nOghzOBbkw7pVweJUyiUzSYZtqz8l5EPsdHcnWvy-DU",
-    locale: "en_US",
-    type: "website",
+    title: 'Home | FullStack Morning',
+    description:
+      'A simple Next.js app with TypeScript, Tailwind CSS, and Geist UI',
+    url: 'https://fullstack-nextjs-morning.vercel.app/',
+    siteName: 'FullStack Morning',
+    images:
+      'https://media.licdn.com/dms/image/v2/C5612AQFxx3XzXO9Vew/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1583841493429?e=2147483647&v=beta&t=nOghzOBbkw7pVweJUyiUzSYZtqz8l5EPsdHcnWvy-DU',
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Home | FullStack Morning",
-    description: "A simple Next.js app with TypeScript, Tailwind CSS, and Geist UI",
-    images: "",
+    card: 'summary_large_image',
+    title: 'Home | FullStack Morning',
+    description:
+      'A simple Next.js app with TypeScript, Tailwind CSS, and Geist UI',
+    images: '',
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
 };
 
@@ -92,11 +98,15 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${ubuntu.variable} ${suwannaphum.variable} antialiased`}
+        suppressHydrationWarning
       >
         <ErrorBoundary errorComponent={Error}>
-          <NavbarWrapper />
           <Suspense fallback={<Loading />}>
-            {children}
+            <NavbarWrapper />
+            <SidebarProvider>
+              <SidebarWrapper />
+              {children}
+            </SidebarProvider>
           </Suspense>
         </ErrorBoundary>
       </body>

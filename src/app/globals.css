@@ -1,10 +1,10 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-accent-color: #f50303; 
+  --color-accent-color: #f50303;
 }
 
 :root {
@@ -34,14 +34,15 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0); 
+  --sidebar-width: 16rem;
+  --sidebar-width-icon: 3rem;
+  --sidebar-width-mobile: 18rem;
+  --sidebar-background: #ffffff; /* Default background */
+  --sidebar-foreground: #333333; /* Default text color */
+  --sidebar-accent: #e5e7eb; /* Default accent color */
+  --sidebar-accent-foreground: #000000; /* Default accent text color */
+  --sidebar-border: #d1d5db; /* Default border color */
+  --sidebar-ring: #2563eb; /* Default ring color */
 }
 
 @theme inline {
@@ -119,15 +120,24 @@ body {
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0); 
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Hide navbar and sidebar only on register page */
+.register-page .AppSidebar,
+.register-page nav,
+.register-page .SidebarProvider,
+.register-page .SidebarTrigger,
+.register-page header,
+.register-page .NavbarComponent {
+  display: none !important;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50; 
+    @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground; 
-  } 
+    @apply bg-background text-foreground;
+  }
 }
-

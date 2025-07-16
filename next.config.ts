@@ -1,10 +1,9 @@
-import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  compiler: {
-    styledComponents: true,
-  }
+const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    turbopack: false,
+  },
 };
 
 export default nextConfig;
