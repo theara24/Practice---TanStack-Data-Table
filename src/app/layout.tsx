@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import type { Metadata } from 'next';
 import { Ubuntu } from 'next/font/google';
 import localFont from 'next/font/local';
@@ -7,9 +6,8 @@ import { Suspense } from 'react';
 import Loading from './loading';
 import Error from './error';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
-import SidebarWrapper from '@/components/sidebar/SidebarWrapper';
 import NavbarWrapper from '@/components/header/NavbarWrapper';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { Providers } from '@/lib/Providers';
 
 const ubuntu = Ubuntu({
   variable: '--font-ubuntu',
@@ -98,17 +96,16 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${ubuntu.variable} ${suwannaphum.variable} antialiased`}
-        suppressHydrationWarning
       >
-        <ErrorBoundary errorComponent={Error}>
-          <Suspense fallback={<Loading />}>
-            <NavbarWrapper />
-            <SidebarProvider>
-              <SidebarWrapper />
+        <Providers>
+          <ErrorBoundary errorComponent={Error}>
+            <Suspense fallback={<Loading />}>
+              <NavbarWrapper />
+
               {children}
-            </SidebarProvider>
-          </Suspense>
-        </ErrorBoundary>
+            </Suspense>
+          </ErrorBoundary>
+        </Providers>
       </body>
     </html>
   );

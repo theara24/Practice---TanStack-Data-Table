@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form'; // Add this import
+import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,24 +21,16 @@ const passwordRegex =
 
 const formSchema = z
   .object({
-    username: z
-      .string()
-      .min(8, { message: 'Username must be at least 8 characters.' }),
+    username: z.string().min(8, { message: 'Username must be at least 8 characters.' }),
     email: z.string().email({ message: 'Invalid email address.' }),
     password: z
       .string()
       .min(8, { message: 'Password must be at least 8 characters.' })
       .regex(passwordRegex, {
         message:
-          'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+          'Password must include uppercase, lowercase, number, and special character.',
       }),
-    confirmPassword: z
-      .string()
-      .min(8, { message: 'Confirm Password must be at least 8 characters.' })
-      .regex(passwordRegex, {
-        message:
-          'Confirm Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
-      }),
+    confirmPassword: z.string().min(8, { message: 'Confirm Password must be at least 8 characters.' }),
     firstName: z.string().min(1, { message: 'First name is required.' }),
     lastName: z.string().min(1, { message: 'Last name is required.' }),
     gender: z.enum(['male', 'female'], { message: 'Gender is required.' }),
@@ -74,43 +66,39 @@ export default function Register() {
     setSubmitError(null);
     setSubmitSuccess(false);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_API}auth/register`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: data.username,
-            email: data.email,
-            password: data.password,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            gender: data.gender,
-            image: 'https://robohash.org/test.png',
-          }),
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_API}auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          gender: data.gender,
+          image: 'https://robohash.org/test.png',
+        }),
+      });
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          `Registration failed: ${errorData.message || 'Unknown error'}`
-        );
+        throw new Error(errorData.message || 'Registration failed.');
       }
-      const result = await response.json();
-      console.log('Registration successful:', result);
+
       setSubmitSuccess(true);
       setTimeout(() => router.push('/login'), 1000);
-    } catch (error) {
-      const err = error as Error;
-      console.error('Registration error:', err);
-      setSubmitError(err.message || 'Failed to register. Please try again.');
+    } catch (err) {
+      const error = err as Error;
+      setSubmitError(error.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Card className="w-2xl mx-auto mt-10">
+    <Card className="w-full max-w-xl mx-auto mt-10">
       <CardHeader>
         <CardTitle>Register</CardTitle>
       </CardHeader>
@@ -130,6 +118,7 @@ export default function Register() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="email"
@@ -137,16 +126,13 @@ export default function Register() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="you@example.com"
-                      {...field}
-                    />
+                    <Input type="email" placeholder="you@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="password"
@@ -160,6 +146,7 @@ export default function Register() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -173,6 +160,7 @@ export default function Register() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="firstName"
@@ -186,6 +174,7 @@ export default function Register() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="lastName"
@@ -199,6 +188,7 @@ export default function Register() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="gender"
@@ -215,14 +205,10 @@ export default function Register() {
                 </FormItem>
               )}
             />
-            {submitError && (
-              <p className="text-red-500 text-sm">{submitError}</p>
-            )}
-            {submitSuccess && (
-              <p className="text-green-500 text-sm">
-                Registration successful! Redirecting...
-              </p>
-            )}
+
+            {submitError && <p className="text-sm text-red-500">{submitError}</p>}
+            {submitSuccess && <p className="text-sm text-green-500">Registration successful! Redirecting...</p>}
+
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? 'Registering...' : 'Register'}
             </Button>

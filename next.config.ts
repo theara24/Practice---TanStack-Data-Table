@@ -1,8 +1,7 @@
-
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    turbopack: false,
+  images: {
+    domains: ['cdn.dummyjson.com'],
   },
 };
 
