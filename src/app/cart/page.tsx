@@ -4,6 +4,7 @@ import {
   selectCartItems,
   removeFromCart,
   addToCart,
+  removeItem,
 } from '@/lib/features/cartSlice';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -78,7 +79,7 @@ export default function CartPage() {
                   ${(item.price * item.quantity).toFixed(2)}
                 </div>
                 <button
-                  onClick={() => dispatch(removeFromCart(item.id))}
+                  onClick={() => dispatch(removeItem(item.id))}
                   className="mt-2 text-red-500 hover:text-red-700 p-2"
                   aria-label="Remove item"
                 >
